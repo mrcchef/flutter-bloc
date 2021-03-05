@@ -19,10 +19,10 @@ class PlayerListingBloc extends Bloc<PlayerListingEvent, PlayerListingState> {
   //that maps events to different states but before calling mapEventToState()
   //transformEvents() is called which and we have used debounceTime() that
   //has Duration parameter
-  // The way this method works it that as the event is called it will block
-  // all the stream within this duration then it will pass the stream and it
-  // will be continued this way i.e blocks the stream in the given duration and
-  // allows the strams after that duration
+  //The way this method works it that as the event is called it will block
+  //all the stream within this duration then it will pass the stream and it
+  //will be continued this way i.e blocks the stream in the given duration and
+  //allows the strams after that duration
   @override
   Stream<Transition<PlayerListingEvent, PlayerListingState>> transformEvents(
       Stream<PlayerListingEvent> events, transitionFn) {
@@ -39,7 +39,6 @@ class PlayerListingBloc extends Bloc<PlayerListingEvent, PlayerListingState> {
     yield PlayerListingFetchingState();
 
     try {
-      print("no");
       List<Players> player = [];
       if (event is CountrySelectEvent) {
         player = await playerRepositories
