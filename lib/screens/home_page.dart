@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:football_players/bloc/player_listing_bloc.dart';
+import 'package:football_players/bloc/player_listing_event.dart';
+import 'package:football_players/modals/search_configuration.dart';
 import 'package:football_players/repositories/player_repositories.dart';
+import 'package:football_players/screens/advance_search.dart';
 import 'package:football_players/theme/themes.dart';
 import 'package:football_players/widget/horizontal_bar.dart';
 import 'package:football_players/widget/player_list.dart';
@@ -16,6 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  SearchConfiguration _searchConfiguration = SearchConfiguration();
   // BlocProvider<T> is responsible for creating the instance of Bloc such that
   // the instance is accessible to inherited widgets
   // T is the Type of the Bloc
@@ -31,15 +35,8 @@ class _HomePageState extends State<HomePage> {
           PlayerListingBloc(playerRepositories: widget.playerRepositories),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Container(
-            alignment: Alignment.topCenter,
-            child: Text(
-              'FootBall Players',
-              // style: appBarTextStyle,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+          title: Text(
+            'FootBall Players',
           ),
         ),
         body: Column(
@@ -52,6 +49,25 @@ class _HomePageState extends State<HomePage> {
             PlayerList(),
           ],
         ),
+        floatingActionButton: FloatingActionButton.extended(
+          label: Text(
+            "Advance Search",
+            style: floatingButtonTextStyle,
+          ),
+          icon: Icon(Icons.filter_list),
+          onPressed: () async {
+            var resultData = await Navigator.of(context).pushNamed(
+              AdvanceSearch.routeName,
+              arguments: {
+                'searchConfiguration': _searchConfiguration,
+              },
+            );
+            BlocProvider.of<PlayerListingBloc>(context)
+                .add(AdvancePlayerSearchEvent(searchConfiguration: resultData));
+            print(_searchConfiguration.selectedPositions);
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
   }

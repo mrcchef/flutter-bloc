@@ -37,13 +37,15 @@ class PlayerListingBloc extends Bloc<PlayerListingEvent, PlayerListingState> {
     yield PlayerListingFetchingState();
 
     try {
-      print("no");
       List<Players> player = [];
       if (event is CountrySelectEvent) {
         player = await playerRepositories
             .fetchPlayersByCountry(event.nationModel.countryId);
       } else if (event is PlayerSearchByNameEvent) {
         player = await playerRepositories.fetchPlayersByName(event.playerName);
+      } else if (event is AdvancePlayerSearchEvent) {
+        player = await playerRepositories
+            .fetchPlayerByAdvanceSearch(event.searchConfiguration);
       }
       print(player.length);
       if (player.length == 0)
